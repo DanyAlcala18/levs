@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEVS — Ropa, tenis y gorras originales</title>
+  <meta name="description" content="LEVS · Ropa, tenis y gorras 100% originales. Abre el armario." />
+  <meta name="theme-color" content="#0b0a09" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter+Tight:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="is-locked">
+
+  <!-- ============ Cursor ============ -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"><span class="cursor__label"></span></div>
+  </div>
+
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <!-- ============ Preloader ============ -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader__mark">LEVS</div>
+    <div class="preloader__line"><i id="preBar"></i></div>
+    <div class="preloader__meta"><span>Preparando el armario</span><span id="preNum">0%</span></div>
+  </div>
+
+  <!-- ============ Escena de apertura: armario cerrado ============ -->
+  <div class="gate" id="gate">
+    <div class="gate__room">
+      <div class="gate__wall"></div>
+      <div class="gate__floor"></div>
+    </div>
+    <div class="gate__wardrobe" id="gateWardrobe">
+      <div class="gate__cornice"><span>EST. 2026 · CIUDAD DE MÉXICO</span></div>
+      <div class="gate__frame">
+        <div class="gate__inside">
+          <div class="gate__inside-glow"></div>
+        </div>
+        <div class="gate__leak" aria-hidden="true"></div>
+        <div class="gdoor gdoor--l">
+          <div class="gdoor__panel gdoor__panel--top"></div>
+          <div class="gdoor__panel gdoor__panel--bottom"></div>
+          <span class="gdoor__logo">LE</span>
+          <span class="gdoor__handle"></span>
+          <div class="gdoor__back"><div class="gdoor__mirror"></div></div>
+        </div>
+        <div class="gdoor gdoor--r">
+          <div class="gdoor__panel gdoor__panel--top"></div>
+          <div class="gdoor__panel gdoor__panel--bottom"></div>
+          <span class="gdoor__logo">VS</span>
+          <span class="gdoor__handle"></span>
+          <div class="gdoor__back"><div class="gdoor__mirror"></div></div>
+        </div>
+      </div>
+      <div class="gate__plinth"></div>
+    </div>
+    <div class="gate__ui" id="gateUI">
+      <p class="gate__eyebrow">Ropa · Tenis · Gorras</p>
+      <p class="gate__lead">Cada pieza, original. Cada visita, con su propia música.</p>
+      <div class="gate__actions">
+        <button class="btn btn--cream magnetic" id="enterMusic" data-cursor="Abrir">
+          <span class="btn__eq"><i></i><i></i><i></i><i></i></span>
+          Abrir el armario con música
+        </button>
+        <button class="btn btn--ghost magnetic" id="enterSilent" data-cursor="Abrir">Abrir en silencio</button>
+      </div>
+      <p class="gate__hint">Pasa el cursor por los botones: el armario se asoma.</p>
+    </div>
+  </div>
+
+  <!-- ============ Ambiente ============ -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__glow ambient__glow--1"></div>
+    <div class="ambient__glow ambient__glow--2"></div>
+    <canvas id="dust"></canvas>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <!-- ============ Navegación ============ -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__logo" data-cursor="Inicio">LEVS<sup>®</sup></a>
+    <nav class="nav__links" aria-label="Principal">
+      <a href="#coleccion">Colección</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#ayuda">Ayuda</a>
+    </nav>
+    <div class="nav__right">
+      <span class="nav__live" id="navLive"><i></i><b id="liveCount">38</b> viendo ahora</span>
+      <button class="nav__icon" id="navMusic" data-cursor="Música" aria-label="Pausar o reproducir música">
+        <span class="eq"><i></i><i></i><i></i><i></i></span>
+      </button>
+      <button class="nav__icon" id="cartBtn" data-cursor="Bolsa" aria-label="Abrir bolsa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 8h13l-1 12.5h-11z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="nav__count" id="cartCount">0</span>
+      </button>
+      <button class="nav__burger" id="burger" aria-label="Menú"><i></i><i></i></button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#coleccion">Colección</a>
+    <a href="#categorias">Categorías</a>
+    <a href="#resenas">Reseñas</a>
+    <a href="#lookbook">Lookbook</a>
+    <a href="#ayuda">Ayuda</a>
+  </div>
+
+  <main id="top">
+
+    <!-- ============ HERO + ARMARIO ============ -->
+    <section class="hero" id="hero">
+      <div class="hero__copy">
+        <p class="chip-live reveal"><span class="dot"></span> Drop 07 · Otoño 2026</p>
+        <h1 class="hero__title">
+          <span class="line"><span class="split">Viste el</span> <em class="split">ritmo</em></span>
+          <span class="line"><span class="split">que llevas.</span></span>
+        </h1>
+        <p class="hero__desc reveal">Abre el armario y elige. Ropa, tenis y gorras seleccionadas una por una, verificadas y listas para salir en 24 horas.</p>
+        <div class="hero__cta reveal">
+          <a href="#coleccion" class="btn btn--cream magnetic" data-cursor="Ver">Ver la colección</a>
+          <button class="btn btn--ghost magnetic" id="heroShuffle" data-cursor="↻">Mezclar armario</button>
+        </div>
+        <dl class="hero__facts reveal">
+          <div><dt>40+</dt><dd>piezas en el armario</dd></div>
+          <div><dt>100%</dt><dd>originales, verificadas</dd></div>
+          <div><dt>24 h</dt><dd>envío express</dd></div>
+        </dl>
+      </div>
+
+      <div class="closet-wrap reveal" id="closetWrap">
+        <div class="closet" id="closet">
+          <div class="closet__door closet__door--l"><div class="closet__door-face"></div></div>
+          <div class="closet__door closet__door--r"><div class="closet__door-face"><div class="closet__mirror"></div></div></div>
+          <div class="closet__cornice"><span class="closet__plate">LEVS</span></div>
+          <div class="closet__body">
+            <div class="closet__inside">
+              <div class="closet__led"></div>
+              <div class="closet__glow"></div>
+
+              <div class="shelf shelf--caps">
+                <div class="shelf__items" id="shelfCaps"></div>
+                <div class="shelf__board"></div>
+              </div>
+
+              <div class="rail-zone" id="railZone" data-cursor="Arrastra">
+                <div class="rail"><i class="rail__bracket rail__bracket--l"></i><i class="rail__bracket rail__bracket--r"></i></div>
+                <div class="hangers" id="hangers"></div>
+              </div>
+
+              <div class="shelf shelf--shoes">
+                <div class="shelf__items" id="shelfShoes"></div>
+                <div class="shelf__board"></div>
+              </div>
+            </div>
+          </div>
+          <div class="closet__plinth"></div>
+        </div>
+        <div class="closet-shadow"></div>
+
+        <div class="closet-ui">
+          <button class="closet-ui__arrow" id="closetPrev" aria-label="Prenda anterior" data-cursor="←">
+            <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <div class="closet-ui__info" id="closetInfo">
+            <span class="closet-ui__brand" id="ciBrand">—</span>
+            <strong class="closet-ui__name" id="ciName">—</strong>
+            <span class="closet-ui__meta"><b id="ciPrice">—</b><span id="ciCount">01 / 01</span></span>
+          </div>
+          <button class="btn btn--cream btn--sm" id="ciView" data-cursor="Abrir">Ver pieza</button>
+          <button class="closet-ui__arrow" id="closetNext" aria-label="Prenda siguiente" data-cursor="→">
+            <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Marquee ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track" id="marquee">
+        <span>Envío gratis desde $2,500</span><em>✦</em>
+        <span>100% originales</span><em>✦</em>
+        <span>Drops cada viernes</span><em>✦</em>
+        <span>Cambios en 30 días</span><em>✦</em>
+        <span>Hasta 12 meses sin intereses</span><em>✦</em>
+      </div>
+    </div>
+
+    <!-- ============ Categorías ============ -->
+    <section class="section cats" id="categorias">
+      <header class="section__head">
+        <div>
+          <p class="eyebrow reveal">01 — Categorías</p>
+          <h2 class="title"><span class="split">Elige tu</span> <em class="split">terreno</em></h2>
+        </div>
+        <div class="drop reveal" id="drop">
+          <span class="drop__label">Próximo drop</span>
+          <div class="drop__time">
+            <div><b id="dD">00</b><small>días</small></div>
+            <div><b id="dH">00</b><small>hrs</small></div>
+            <div><b id="dM">00</b><small>min</small></div>
+            <div><b id="dS">00</b><small>seg</small></div>
+          </div>
+        </div>
+      </header>
+      <div class="bento" id="bento"></div>
+    </section>
+
+    <!-- ============ Colección ============ -->
+    <section class="section collection" id="coleccion">
+      <header class="section__head">
+        <div>
+          <p class="eyebrow reveal">02 — Colección</p>
+          <h2 class="title"><span class="split">Piezas que</span> <em class="split">hablan</em></h2>
+        </div>
+        <div class="filters reveal" id="filters" role="tablist">
+          <button class="chip is-active" data-filter="all">Todo</button>
+          <button class="chip" data-filter="hoodies">Hoodies</button>
+          <button class="chip" data-filter="playeras">Playeras</button>
+          <button class="chip" data-filter="chamarras">Chamarras</button>
+          <button class="chip" data-filter="pantalones">Pantalones</button>
+          <button class="chip" data-filter="tenis">Tenis</button>
+          <button class="chip" data-filter="gorras">Gorras</button>
+        </div>
+      </header>
+      <div class="grid" id="grid"></div>
+      <p class="grid__count" id="gridCount"></p>
+    </section>
+
+    <!-- ============ Manifiesto ============ -->
+    <section class="section manifesto" id="manifiesto">
+      <p class="eyebrow reveal">03 — Manifiesto</p>
+      <div class="manifesto__text">
+        <p class="mline">No seguimos tendencias,</p>
+        <p class="mline">las <em>bailamos</em>. Cada pieza</p>
+        <p class="mline">es original, cada drop</p>
+        <p class="mline">tiene <em>volumen</em>.</p>
+      </div>
+      <div class="stats">
+        <div class="stat reveal"><strong data-count="40" data-suffix="+">0</strong><span>piezas en catálogo</span></div>
+        <div class="stat reveal"><strong data-count="1284">0</strong><span>reseñas de clientes</span></div>
+        <div class="stat reveal"><strong data-count="100" data-suffix="%">0</strong><span>originales</span></div>
+        <div class="stat reveal"><strong data-count="24" data-suffix=" h">0</strong><span>envío express</span></div>
+      </div>
+    </section>
+
+    <!-- ============ Reseñas ============ -->
+    <section class="section reviews" id="resenas">
+      <header class="section__head">
+        <div>
+          <p class="eyebrow reveal">04 — Reseñas</p>
+          <h2 class="title"><span class="split">Comprado y</span> <em class="split">comprobado</em></h2>
+        </div>
+        <div class="rating reveal">
+          <div class="rating__num"><b data-count="4.9" data-decimals="1">0</b><span>/5</span></div>
+          <div>
+            <div class="stars stars--big"><i></i><i></i><i></i><i></i><i></i></div>
+            <small>1,284 reseñas · fotos de clientes</small>
+          </div>
+        </div>
+      </header>
+      <div class="reviews__wall" id="reviewsWall">
+        <div class="reviews__col" data-speed="44"></div>
+        <div class="reviews__col reviews__col--rev" data-speed="52"></div>
+        <div class="reviews__col" data-speed="48"></div>
+      </div>
+      <div class="ticker">
+        <span class="ticker__label"><i class="dot"></i> Compras recientes</span>
+        <div class="ticker__lane" id="buyTicker"></div>
+      </div>
+    </section>
+
+    <!-- ============ Lookbook ============ -->
+    <section class="section lookbook" id="lookbook">
+      <header class="section__head">
+        <div>
+          <p class="eyebrow reveal">05 — Lookbook</p>
+          <h2 class="title"><span class="split">Looks en</span> <em class="split">movimiento</em></h2>
+        </div>
+        <div class="lookbook__nav reveal">
+          <button class="round-btn" id="lookPrev" aria-label="Anterior" data-cursor="←"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="round-btn" id="lookNext" aria-label="Siguiente" data-cursor="→"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </header>
+      <div class="look-track" id="lookTrack"></div>
+    </section>
+
+    <!-- ============ Ayuda: políticas + FAQ ============ -->
+    <section class="section help" id="ayuda">
+      <header class="section__head">
+        <div>
+          <p class="eyebrow reveal">06 — Políticas</p>
+          <h2 class="title"><span class="split">Claro como</span> <em class="split">el agua</em></h2>
+        </div>
+        <p class="section__note reveal">Toca una tarjeta para ver el detalle.</p>
+      </header>
+      <div class="policy-grid" id="policyGrid"></div>
+
+      <div class="faq" id="faq">
+        <div class="faq__side">
+          <p class="eyebrow reveal">07 — Preguntas frecuentes</p>
+          <h2 class="title"><span class="split">Lo que todos</span> <em class="split">preguntan</em></h2>
+          <p class="faq__intro reveal">¿No encuentras tu respuesta? Escríbenos por WhatsApp o Instagram y te contestamos en minutos.</p>
+          <a href="#contacto" class="btn btn--ghost magnetic reveal" data-cursor="Hola">Hablar con LEVS</a>
+        </div>
+        <div class="faq__list" id="faqList"></div>
+      </div>
+    </section>
+
+    <!-- ============ Newsletter ============ -->
+    <section class="section news" id="contacto">
+      <div class="news__card reveal">
+        <div class="news__glow"></div>
+        <p class="eyebrow">08 — Backstage</p>
+        <h2 class="title title--xl"><span class="split">Entra antes</span> <em class="split">que nadie</em></h2>
+        <p class="news__lead">Drops anticipados, la playlist de la tienda y descuentos que solo suenan aquí.</p>
+        <form class="news__form" id="newsForm">
+          <input type="email" placeholder="tu@email.com" aria-label="Tu correo" required />
+          <button class="btn btn--cream" type="submit" data-cursor="Go">Suscribirme</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__cols">
+      <div class="footer__brand">
+        <span class="footer__logo">LEVS<sup>®</sup></span>
+        <p>Ropa, tenis y gorras originales. Seleccionadas una por una en Ciudad de México.</p>
+      </div>
+      <div><h4>Tienda</h4><a href="#coleccion">Colección</a><a href="#categorias">Categorías</a><a href="#lookbook">Lookbook</a></div>
+      <div><h4>Ayuda</h4><a href="#ayuda">Envíos</a><a href="#ayuda">Cambios</a><a href="#faq">Preguntas</a></div>
+      <div><h4>Social</h4><a href="#" data-cursor="IG">Instagram</a><a href="#" data-cursor="TT">TikTok</a><a href="#" data-cursor="WA">WhatsApp</a></div>
+    </div>
+    <div class="footer__big" aria-hidden="true">LEVS</div>
+    <div class="footer__row"><span>© 2026 LEVS. Todos los derechos reservados.</span><span>Hecho con ritmo en CDMX</span></div>
+  </footer>
+
+  <!-- ============ Reproductor (solo audio) ============ -->
+  <div class="player" id="player">
+    <div class="player__disc" id="disc"><div class="player__label" id="discLabel"></div></div>
+    <div class="player__body">
+      <div class="player__meta">
+        <span class="player__now" id="playerNow">LEVS Radio</span>
+        <div class="player__title-wrap"><span class="player__title" id="trackTitle">—</span></div>
+        <span class="player__artist" id="trackArtist"></span>
+      </div>
+      <div class="player__progress" id="progressBar"><i id="progressFill"></i></div>
+      <div class="player__spotify" id="spotifyBox"><div id="spotifyEmbed"></div></div>
+      <div class="player__controls">
+        <button id="prevBtn" aria-label="Anterior" data-cursor="◂"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+        <button id="playBtn" class="player__play" aria-label="Reproducir" data-cursor="▶">
+          <svg class="ico-play" viewBox="0 0 24 24"><path d="M7 4v16l14-8z"/></svg>
+          <svg class="ico-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+        </button>
+        <button id="nextBtn" aria-label="Siguiente aleatoria" data-cursor="⤮"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+        <span class="player__shuffle" title="Aleatorio">⤮</span>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.7" aria-label="Volumen" />
+      </div>
+    </div>
+    <button class="player__toggle" id="playerToggle" aria-label="Minimizar reproductor"><i></i></button>
+  </div>
+  <!-- reproductor de YouTube oculto: solo se usa el audio -->
+  <div class="yt-audio" aria-hidden="true"><div id="ytFrame"></div></div>
+
+  <!-- ============ Notificación de compra ============ -->
+  <div class="buy-note" id="buyNote" data-cursor="Ver">
+    <div class="buy-note__img"><img alt="" id="buyNoteImg" /></div>
+    <div class="buy-note__body">
+      <strong id="buyNoteWho">—</strong>
+      <span>compró <em id="buyNoteWhat">—</em></span>
+      <small id="buyNoteWhen">hace un momento</small>
+    </div>
+    <i class="buy-note__bar"></i>
+  </div>
+
+  <!-- ============ Bolsa ============ -->
+  <div class="drawer is-empty" id="drawer" aria-hidden="true">
+    <div class="drawer__backdrop" id="drawerClose"></div>
+    <aside class="drawer__panel" aria-label="Tu bolsa">
+      <header class="drawer__head">
+        <h3>Tu bolsa <span id="drawerCount">0</span></h3>
+        <button class="drawer__x" id="drawerX" aria-label="Cerrar">×</button>
+      </header>
+      <div class="drawer__ship">
+        <p id="shipText">Te faltan <b>$2,500</b> para envío gratis</p>
+        <div class="drawer__ship-bar"><i id="shipBar"></i></div>
+      </div>
+      <div class="drawer__list" id="drawerList"></div>
+      <div class="drawer__empty">
+        <p class="drawer__empty-title">Tu bolsa está vacía</p>
+        <p>El armario te espera.</p>
+        <a href="#coleccion" class="btn btn--cream btn--sm" id="drawerGo">Ir a la colección</a>
+      </div>
+      <footer class="drawer__foot">
+        <div class="drawer__total"><span>Subtotal</span><b id="drawerTotal">$0</b></div>
+        <button class="btn btn--cream btn--full magnetic" id="checkoutBtn" data-cursor="Pagar">Finalizar compra</button>
+        <small>Pago seguro · Envío en 24 h · Cambios en 30 días</small>
+      </footer>
+    </aside>
+  </div>
+
+  <!-- ============ Modal de producto ============ -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" id="modalClose"></div>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <button class="modal__x" id="modalX" aria-label="Cerrar">×</button>
+      <div class="modal__media" id="modalMedia"></div>
+      <div class="modal__info">
+        <span class="modal__brand" id="modalBrand"></span>
+        <h3 id="modalName"></h3>
+        <p class="modal__price" id="modalPrice"></p>
+        <p class="modal__desc" id="modalDesc"></p>
+        <p class="modal__live"><i></i><b id="modalViewers">12</b> personas viendo esta pieza</p>
+        <div class="modal__sizes-label"><span>Talla</span><a href="#faq" id="sizeGuide">Guía de tallas</a></div>
+        <div class="modal__sizes" id="modalSizes"></div>
+        <button class="btn btn--cream btn--full magnetic" id="modalAdd" data-cursor="+1">Añadir a la bolsa</button>
+        <ul class="modal__perks"><li>Original verificado</li><li>Envío 24 h</li><li>Cambio 30 días</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="js/playlist.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
